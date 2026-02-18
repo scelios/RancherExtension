@@ -1,5 +1,5 @@
 import { importTypes } from '@rancher/auto-import';
-import { IPlugin } from '@shell/core/types';
+import { IPlugin, TabLocation } from '@shell/core/types';
 
 // Init the package
 export default function(plugin: IPlugin): void {
@@ -10,5 +10,12 @@ export default function(plugin: IPlugin): void {
   plugin.metadata = require('./package.json');
 
   // Load a product
-  // plugin.addProduct(require('./product'));
+  plugin.addTab( 
+  TabLocation.RESOURCE_SHOW_CONFIGURATION,
+  { resource: ['pod'] }, 
+  {
+    name: 'showEvent',
+    component:  () => import('./components/showEvent.vue')
+  }
+);
 }
