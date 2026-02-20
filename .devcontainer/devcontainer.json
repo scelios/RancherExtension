@@ -1,0 +1,18 @@
+{
+  "name": "pop-rancher",
+  "dockerComposeFile": [
+    "../docker-compose.yaml"
+  ],
+  "service": "rancher",
+  "workspaceFolder": "/usr/app",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode-remote.remote-containers",
+        "dbaeumer.vscode-eslint",
+        "Vue.volar"
+      ]
+    }
+  }
+}

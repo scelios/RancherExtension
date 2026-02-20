@@ -1,0 +1,19 @@
+services:
+  rancher:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    container_name: rancher
+    ports:
+      - "8005:8005"
+      - "8080:8080"
+    volumes:
+      - ./file:/usr/app
+    networks:
+      - ranch
+    working_dir: /usr/app
+    command: ["tail", "-f", "/dev/null"]
+
+networks:
+  ranch:
+    driver: bridge
