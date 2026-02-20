@@ -1,5 +1,5 @@
 import { importTypes } from '@rancher/auto-import';
-import { IPlugin } from '@shell/core/types';
+import { IPlugin, CardLocation} from '@shell/core/types';
 
 // Init the package
 export default function(plugin: IPlugin): void {
@@ -10,5 +10,11 @@ export default function(plugin: IPlugin): void {
   plugin.metadata = require('./package.json');
 
   // Load a product
-  // plugin.addProduct(require('./product'));
+  plugin.addCard(
+  CardLocation.CLUSTER_DASHBOARD_CARD,
+  {},
+  {
+    component: () => import('./components/showEvent.vue')
+  }
+);
 }
