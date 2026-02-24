@@ -1,5 +1,5 @@
 import { importTypes } from '@rancher/auto-import';
-import { IPlugin, CardLocation} from '@shell/core/types';
+import { IPlugin, CardLocation, TabLocation} from '@shell/core/types';
 
 // Init the package
 export default function(plugin: IPlugin): void {
@@ -10,10 +10,19 @@ export default function(plugin: IPlugin): void {
   plugin.metadata = require('./package.json');
 
   // Load a product
-  plugin.addCard(
-  CardLocation.CLUSTER_DASHBOARD_CARD,
-  {},
+//   plugin.addCard(
+//   CardLocation.CLUSTER_DASHBOARD_CARD,
+//   {},
+//   {
+//     component: () => import('./components/showEvent.vue')
+//   }
+// );
+  plugin.addTab( 
+  TabLocation.RESOURCE_DETAIL,
+  {}, 
   {
+    name:       'Show Event',
+    weight:     -5,
     component: () => import('./components/showEvent.vue')
   }
 );

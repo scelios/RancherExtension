@@ -13,16 +13,18 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh |
     && . "$NVM_DIR/nvm.sh" \
     && nvm install 20.17.0 \
     && nvm alias default 20.17.0 \
-    && npm install -g yarn
+    && npm install -g yarn \
+    && npm install @kubernetes/client-node -g 
 
 ENV PATH="${NVM_DIR}/versions/node/v20.17.0/bin:${PATH}"
 
 # WORKDIR /usr/app
-# RUN npm init @rancher/extension@latest hello-world
+# RUN npm init @rancher/extension@latest extension
 
-WORKDIR /usr/app/hello-world
+# WORKDIR /usr/app/extension
 # RUN yarn install -y
 
 EXPOSE 8005
 EXPOSE 8080
+EXPOSE 8081
 
