@@ -1,6 +1,6 @@
 {
-  "name": "hello-world",
-  "description": "hello-world plugin",
+  "name": "extension",
+  "description": "extension plugin",
   "version": "0.1.0",
   "private": false,
   "rancher": {
