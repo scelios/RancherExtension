@@ -1,14 +1,14 @@
 <template>
     <div class="extension-container">
-        <h1>Cluster Events</h1>
+        <!-- Dynamic Title -->
+        <h1>Events for {{ resourceKind }}: {{ resourceName }}</h1>
         
-        <!-- Loading State -->
-        <div v-if="isLoading">Loading events from cluster...</div>
+        <button @click="slidein">Slide</button>
+        <div v-if="isLoading">Loading events...</div>
         
-        <!-- Error State -->
         <div v-else-if="errorMessage" class="error">{{ errorMessage }}</div>
 
-        <!-- Table -->
+        <div v-else-if="events.length === 0">No events found for this resource.</div>
         <table v-else class="event-table">
             <thead>
                 <tr>
@@ -44,6 +44,7 @@
                         {{ event.description }}
                     </td>
                     <td>{{ event.date }}</td>
+                    <td>{{ event.kind }}</td>
                 </tr>
             </tbody>
         </table>
@@ -51,79 +52,127 @@
 </template>
 
 <script>
-import { getCurrentScope } from 'vue';
-
 export default {
+    
+    props: {
+        resource: {
+            type: Object,
+            required: true
+        }
+    },
     data() {
         return {
             isLoading: false,
             errorMessage: '',
             sortKey: 'date',
             sortOrder: 'desc',
-            events: [] // Starts empty, fills up from API
+            events: [] 
         };
     },
-    
-    // Trigger fetch when component loads
-    async mounted() {
-        await this.fetchEvents();
-    },
-
     computed: {
+        // Helpers to get cleaner names from the prop
+        resourceName() {
+            return this.resource?.metadata?.name || '';
+        },
+        resourceNamespace() {
+            return this.resource?.metadata?.namespace || '';
+        },
+        resourceKind() {
+            return this.resource?.kind || '';
+        },
         sortedEvents() {
             return this.events.slice().sort((a, b) => {
                 let modifier = 1;
                 if (this.sortOrder === 'desc') modifier = -1;
+                
+                const valA = (a[this.sortKey] || '').toString();
+                const valB = (b[this.sortKey] || '').toString();
 
-                if (a[this.sortKey] < b[this.sortKey]) return -1 * modifier;
-                if (a[this.sortKey] > b[this.sortKey]) return 1 * modifier;
+                if (valA < valB) return -1 * modifier;
+                if (valA > valB) return 1 * modifier;
                 return 0;
             });
         }
     },
+
+    async mounted() {
+        await this.fetchEvents();
+    },
+
+    // Re-fetch if the user creates a new event or switches tabs
+    watch: {
+        resource() {
+            this.fetchEvents();
+        }
+    },
+
     methods: {
+        slidein() {
+            this.$shell.slideIn.open({
+                id: 'my-slidein',
+                title: 'My Slide-in',
+                component: {
+                    template: '<div><h2>This is a slide-in!</h2><p>You can put any content here.</p></div>'
+                }
+            });
+            console.log("Slide-in opened");
+        },
+
         async fetchEvents() {
             this.isLoading = true;
             this.errorMessage = '';
             
             try {
-                // 1. Fetch from Rancher Store (Steve API)
-                // 'cluster/findAll' is the standard way to get resources in Rancher Extensions
                 const allEvents = await this.$store.dispatch('cluster/findAll', { type: 'event' });
 
-                // 2. Map Kubernetes object structure to our simple table structure
-                this.events = allEvents.map(evt => {
+                const filteredList = allEvents.filter(evt => {
+                    const involved = evt.involvedObject;
+                    if (!involved) return false;
+
+                    // Special handling for Namespace events: we want to include 
+                    // events that are either about the Namespace itself OR events that occur within that Namespace
+                    if (this.resourceKind === 'Namespace') {
+                        return (involved.namespace === this.resourceName) || 
+                               (involved.kind === 'Namespace' && involved.name === this.resourceName);
+                    }
+
+                    if ((this.resourceNamespace && involved.namespace !== this.resourceNamespace)
+                        || (involved.name !== this.resourceName)
+                        || (involved.kind.toLowerCase() !== this.resourceKind.toLowerCase()))
+                        {
+                        return false;
+                    }
+
+                    return true;
+                });
+
+                console.log("DEBUG: Matching events:", filteredList);
+
+                this.events = filteredList.map(evt => {
                     return {
                         id: evt.id,
-                        // Get the name of the pod/node/service involved
-                        name: evt.involvedObject?.name || 'Unknown', 
-                        kind: evt.involvedObject?.kind || 'Resource',
-                        // Create a clean description
+                        name: evt.involvedObject.name, 
+                        kind: evt.involvedObject.kind,
                         description: evt.message || '',
                         reason: evt.reason || 'Info',
                         type: evt.type || 'Normal',
-                        // Format date (or keep raw string)
                         date: evt.lastTimestamp || evt.firstTimestamp
                     };
                 });
 
             } catch (err) {
-                this.errorMessage = `Error loading events: ${err.message}`;
-                console.error(err);
+                this.errorMessage = `Error: ${err.message}`;
             } finally {
                 this.isLoading = false;
             }
         },
         sortBy(key) {
-            // If clicking the same column, toggle order. Otherwise set to that column ascending.
             if (this.sortKey === key) {
                 this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
             } else {
                 this.sortKey = key;
                 this.sortOrder = 'asc';
             }
-        },
-
         }
     }
 };
@@ -143,7 +192,7 @@ export default {
 }
 
 .text-danger {
-    color: #dc3545; /* Red color for Warnings */
+    color: #dc3545;
     font-weight: bold;
 }
 
