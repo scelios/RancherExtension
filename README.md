@@ -1,37 +1,40 @@
-This project imas to create a collection of Rancher's extension that will be
-used in production environment to help SRE opevator in their tasks.
+This project aims to create a collection of Rancher extensions that will be
+used in a production environment to help SRE operators with their tasks.
 
-For this, small extensions is better since it will have good understantability
-and an explicit documentation for future development.
+For this, smaller extensions are better since they offer good understandability
+and explicit documentation for future development.
 
-Vue does not offer garbage collection so memery leaks needs to be watch for. But
-it permit the usage of api to display information need for the team.
+Vue applications can suffer from memory leaks if resources are not properly managed, so memory usage needs to be watched specifically.
+However, it permits the usage of APIs to display information needed by the team.
 
-Need to see if it's possible to directly interact with kubernetes
+Need to see if it's possible to directly interact with Kubernetes.
 
-The user who need to add extension need to have an account that can add extension
-(need access to upstream's extension cluster)
-(in preference -> advanced features -> Enable Extension developer features)
-The application can use the same account as the user since at the first connection
-it will ask for a connection.
+Users who need to add extensions must have an account with permission to add extensions
+(needs access to the upstream extension cluster).
+(In Preferences -> Advanced Features -> Enable Extension Developer Features)
 
-Error enconters so far:
+The application can use the same account as the user, since at the first connection
+it will ask for authentication.
 
-Problem with the command `API=<url> yarn dev` wich launch the app on localhost:8005
-but this port seems to already be in used. Fixed -> change the port in package.json
-by adding `"dev": "NODE_ENV=dev ./node_modules/.bin/vue-cli-service serve --port ${PORT:-8080}",` 
-in the script part
+Errors encountered so far:
 
-Problem with the extension menu wich launch 
-```Extension support is not enabled
+Problem with the command `API=<url> yarn dev` which launches the app on localhost:8005
+but this port seems to already be in use. 
+Fixed -> change the port in package.json by adding:
+`"dev": "NODE_ENV=dev ./node_modules/.bin/vue-cli-service serve --port ${PORT:-8080}",` 
+in the scripts section.
+
+Problem with the extension menu which launches:
+```
+Extension support is not enabled
 Automatic installation is not available - required Helm Charts could not be found
 ```
-Fixed -> update the package.json and revert seems to remove this error
+Fixed -> updating the package.json and reverting seemed to remove this error.
 
-Problem with the node/npm version wich make impossible for `yarn install` to completed
-Fixed -> use the docker to have strictly the good version and don't modify it
+Problem with the node/npm version which makes it impossible for `yarn install` to complete.
+Fixed -> use Docker to have strictly the correct version and do not modify it.
 
-Problem with the yarn dev environment with launch
+Problem with the yarn dev environment which launches:
 ```ERROR
 [object Object]
 handleError@https://localhost:8080/js/chunk-vendors.js:406831:58
@@ -42,8 +45,8 @@ Fixed -> ?
 Source
 
 [Getting started with rancher extension](http://extensions.rancher.io/extensions/next/extensions-getting-started)
-The official documentation will provoke crash even when stricty following the instruction
-and the version. You really should stick with the docker
+The official documentation will provoke a crash even when strictly following the instructions
+and the version. You really should stick with Docker.
 
 [Youtube follow along guide](https://www.youtube.com/watch?v=7xBUvNI__uc)
 

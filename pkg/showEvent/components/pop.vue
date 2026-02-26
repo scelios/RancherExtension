@@ -44,7 +44,6 @@
                         {{ event.description }}
                     </td>
                     <td>{{ event.date }}</td>
-                    <td>{{ event.kind }}</td>
                 </tr>
             </tbody>
         </table>

@@ -50,30 +50,32 @@ export default function(plugin: IPlugin): void {
       return true;
     },
     invoke(opts: ActionOpts, values: any[]) {
-      // console.log('table action executed 1', this, opts, values); // eslint-disable-line no-console
+      console.log('table action executed 1', this, opts, values); // eslint-disable-line no-console
       
-      const resource = values[0];
-      const router = resource?.$root?.$router || resource?.$router;
+      // const router = (window as any).$nuxt?.$router; // Try accessing global nuxt router
       
-      if (router) {
-        router.push({ path: '/home' });
-      }
-      else
-      {
-        console.error("Could not find router instance on resource", resource);
-      }
+      // if (router) {
+      //   router.push({ path: '/home' });
+      // }
+      // else
+      // {
+      //   console.error("Could not find router instance", (window as any).$nuxt);
+      // }
 
-      const shell = resource?.$root?.$shell || resource?.$shell;
+
+      const shell = (window as any).$nuxt?.$shell;
 
       if (shell) {
-        shell.slideIn.open({
-            component: () => import('./components/pop.vue'),
+        import('./components/pop.vue').then((component) => {
+          shell.slideIn.open({
+            component: component.default,
             title:     'Show Event', 
             width:     500,
             props:     { values } // Optional: Pass the selected rows to your component props
           });
+        });
       } else {
-        console.error("Could not find shell instance on resource", resource);
+        console.error("Could not find shell instance");
       }
     }
   }
