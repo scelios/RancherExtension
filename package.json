@@ -9,8 +9,7 @@
     "cache-loader": "^4.1.0",
     "color": "4.2.3",
     "ip": "2.0.1",
-    "node-polyfill-webpack-plugin": "^3.0.0",
-    "react-router-dom": "^7.13.1"
+    "node-polyfill-webpack-plugin": "^3.0.0"
   },
   "resolutions": {
     "@types/node": "~20.10.0",
@@ -25,7 +24,5 @@
     "publish-pkgs": "./node_modules/@rancher/shell/scripts/extension/publish",
     "parse-tag-name": "./node_modules/@rancher/shell/scripts/extension/parse-tag-name"
   },
-  "devDependencies": {
-    "@types/react-router-dom": "^5.3.3"
-  }
+  "devDependencies": {}
 }

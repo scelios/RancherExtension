@@ -14,7 +14,6 @@ The user who need to add extension need to have an account that can add extensio
 (in preference -> advanced features -> Enable Extension developer features)
 The application can use the same account as the user since at the first connection
 it will ask for a connection.
-![alt text](image.png)
 
 Error enconters so far:
 

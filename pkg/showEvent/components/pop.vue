@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import pop from './pop.vue';
 export default {
     
     props: {
@@ -108,12 +109,8 @@ export default {
 
     methods: {
         slidein() {
-            this.$shell.slideIn.open({
-                id: 'my-slidein',
-                title: 'My Slide-in',
-                component: {
-                    template: '<div><h2>This is a slide-in!</h2><p>You can put any content here.</p></div>'
-                }
+            this.$shell.slideIn.open(pop, {
+                title: 'My Slide-in'
             });
             console.log("Slide-in opened");
         },

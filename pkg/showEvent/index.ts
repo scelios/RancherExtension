@@ -1,7 +1,7 @@
 import { importTypes } from '@rancher/auto-import';
 import { IPlugin, CardLocation, TabLocation, PanelLocation, ActionLocation, ActionOpts} from '@shell/core/types';
 import { useShell } from '@shell/apis';
-import { useNavigate } from 'react-router-dom';
+
 // Init the package
 export default function(plugin: IPlugin): void {
   // const shellApi = useShell();
@@ -51,9 +51,18 @@ export default function(plugin: IPlugin): void {
     },
     invoke(opts: ActionOpts, values: any[]) {
       // console.log('table action executed 1', this, opts, values); // eslint-disable-line no-console
-      const navigate = useNavigate();
-      navigate('/home');
+      
       const resource = values[0];
+      const router = resource?.$root?.$router || resource?.$router;
+      
+      if (router) {
+        router.push({ path: '/home' });
+      }
+      else
+      {
+        console.error("Could not find router instance on resource", resource);
+      }
+
       const shell = resource?.$root?.$shell || resource?.$shell;
 
       if (shell) {
