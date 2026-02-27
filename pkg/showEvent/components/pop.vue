@@ -3,7 +3,6 @@
         <!-- Dynamic Title -->
         <h1>Events for {{ resourceKind }}: {{ resourceName }}</h1>
         
-        <button @click="slidein">Slide</button>
         <div v-if="isLoading">Loading events...</div>
         
         <div v-else-if="errorMessage" class="error">{{ errorMessage }}</div>
@@ -51,7 +50,6 @@
 </template>
 
 <script>
-import pop from './pop.vue';
 export default {
     
     props: {
@@ -72,13 +70,13 @@ export default {
     computed: {
         // Helpers to get cleaner names from the prop
         resourceName() {
-            return this.resource?.metadata?.name || '';
+            return this.resource?.metadata?.name || this.resource?.name || this.resource?.id || '';
         },
         resourceNamespace() {
-            return this.resource?.metadata?.namespace || '';
+            return this.resource?.metadata?.namespace || this.resource?.namespace || '';
         },
         resourceKind() {
-            return this.resource?.kind || '';
+            return this.resource?.kind || this.resource?.type || '';
         },
         sortedEvents() {
             return this.events.slice().sort((a, b) => {
@@ -96,6 +94,7 @@ export default {
     },
 
     async mounted() {
+        console.log('Pop component mounted with resource:', this.resource);
         await this.fetchEvents();
     },
 
@@ -107,12 +106,6 @@ export default {
     },
 
     methods: {
-        slidein() {
-            this.$shell.slideIn.open(pop, {
-                title: 'My Slide-in'
-            });
-            console.log("Slide-in opened");
-        },
 
         async fetchEvents() {
             this.isLoading = true;
@@ -141,8 +134,6 @@ export default {
 
                     return true;
                 });
-
-                console.log("DEBUG: Matching events:", filteredList);
 
                 this.events = filteredList.map(evt => {
                     return {

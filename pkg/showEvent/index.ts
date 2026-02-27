@@ -1,6 +1,7 @@
 import { importTypes } from '@rancher/auto-import';
 import { IPlugin, CardLocation, TabLocation, PanelLocation, ActionLocation, ActionOpts} from '@shell/core/types';
 import { useShell } from '@shell/apis';
+import pop from './components/pop.vue';
 
 // Init the package
 export default function(plugin: IPlugin): void {
@@ -12,26 +13,26 @@ export default function(plugin: IPlugin): void {
   plugin.metadata = require('./package.json');
 
   // Load a product
-  plugin.addTab( 
-  TabLocation.RESOURCE_DETAIL,
-  {}, 
-  {
-    name:       'Show Event',
-    weight:     -5,
-    component: () => import('./components/pop.vue')
+  // plugin.addTab( 
+  // TabLocation.RESOURCE_DETAIL,
+  // {}, 
+  // {
+  //   name:       'Show Event',
+  //   weight:     -5,
+  //   component: () => import('./components/pop.vue')
 
-  }
-  );
+  // }
+  // );
 
-  plugin.addCard(
-  CardLocation.CLUSTER_DASHBOARD_CARD,
-  { },
-  {
-    label:     'try',
-    // labelKey:  'generic.comingSoon',
-    component: () => import('./components/helloWorld.vue')
-  }
-  );
+  // plugin.addCard(
+  // CardLocation.CLUSTER_DASHBOARD_CARD,
+  // { },
+  // {
+  //   label:     'try',
+  //   // labelKey:  'generic.comingSoon',
+  //   component: () => import('./components/helloWorld.vue')
+  // }
+  // );
   
   plugin.addPanel(
     PanelLocation.DETAILS_MASTHEAD,
@@ -50,8 +51,6 @@ export default function(plugin: IPlugin): void {
       return true;
     },
     invoke(opts: ActionOpts, values: any[]) {
-      console.log('table action executed 1', this, opts, values); // eslint-disable-line no-console
-      
       // const router = (window as any).$nuxt?.$router; // Try accessing global nuxt router
       
       // if (router) {
@@ -63,16 +62,18 @@ export default function(plugin: IPlugin): void {
       // }
 
 
-      const shell = (window as any).$nuxt?.$shell;
+      const shell = (window as any).$globalApp?.$shell;
 
       if (shell) {
-        import('./components/pop.vue').then((component) => {
-          shell.slideIn.open({
-            component: component.default,
-            title:     'Show Event', 
-            width:     500,
-            props:     { values } // Optional: Pass the selected rows to your component props
-          });
+        // Try passing the raw target object if it's a proxy
+        
+        shell.slideIn.open(pop, {
+          // Some versions of shell/nuxt might flatten props, so let's try passing it directly in the object
+          // AND nested in props just in case.
+          resource: values[0], 
+          props: { resource: values[0] },
+          title: 'Show Event',
+          width: '50%'
         });
       } else {
         console.error("Could not find shell instance");
