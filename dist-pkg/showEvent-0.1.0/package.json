@@ -1,6 +1,6 @@
 {
   "name": "showEvent",
-  "description": "showEvent plugin",
+  "description": "Help you see easily the events of a resource",
   "version": "0.1.0",
   "private": false,
   "rancher": true,
