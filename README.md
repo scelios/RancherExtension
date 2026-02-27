@@ -1,15 +1,17 @@
 This project aims to create a collection of Rancher extensions that will be
 used in a production environment to help SRE operators with their tasks.
 
-For this, smaller extensions are better since they offer good understandability
-and explicit documentation for future development.
+a) For this, smaller extensions are better since they offer good understandability
+and explicit documentation for future development. SO we'll need one project that will host
+all of the extension.
 
-Vue applications can suffer from memory leaks if resources are not properly managed, so memory usage needs to be watched specifically.
+b) Vue applications can suffer from memory leaks if resources are not properly managed, so memory usage needs to be watched specifically.
 However, it permits the usage of APIs to display information needed by the team.
 
-Need to see if it's possible to directly interact with Kubernetes.
+c) It doesn't seems to be possible to directly interract with the kubernetes environment,
+you can interact through rancher
 
-Users who need to add extensions must have an account with permission to add extensions
+d) Users who need to add extensions must have an account with permission to add extensions
 (needs access to the upstream extension cluster).
 (In Preferences -> Advanced Features -> Enable Extension Developer Features)
 
