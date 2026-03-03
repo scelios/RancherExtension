@@ -55,8 +55,7 @@ in the scripts section.
 Extension support is not enabled
 Automatic installation is not available - required Helm Charts could not be found
 ```
-Fixed -> updating the package.json and reverting seemed to remove this error.
-Update: Seems like it has been an rancher update since i can't reproduce this error
+Fixed -> This error come from a previous version of rancher, update node and yarn
 
 - Problem with the yarn dev environment which launches:
 ```ERROR
@@ -70,9 +69,13 @@ Fixed -> ?
 
 fixed -> ?
 
-- Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost
+- Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost (through const shell = (window as any).$globalApp?.$shell;)
 
 fixed -> For now I just don't use it
+
+- Problem with the extension wich once installed on the server and reloaded the page disappear
+
+fixed -> Watch out with the name of the extension, it should only contains lowercase letters
 
 # Source
 
