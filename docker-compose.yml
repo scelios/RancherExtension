@@ -1,0 +1,23 @@
+services:
+
+
+  rancher-extension:
+    build: .
+    container_name: rancher-extension
+    volumes:
+      - ./file:/usr/app
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+    environment:
+      - DISPLAY=${DISPLAY} 
+    networks:
+      - rancher-extension-network
+    working_dir: /usr/app
+    # command: ["tail", "-f", "/dev/null"] # Keep the container running for debugging purposes
+    command: ["bash", "-c", "yarn install && API=https://priv-mtsremtmcstg.prod.lan/  yarn dev"] # Install dependencies and start the development server
+
+
+networks:
+  rancher-extension-network:

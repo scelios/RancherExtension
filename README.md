@@ -13,6 +13,9 @@ used in a production environment to help SRE operators with their tasks.
 ``yarn serve-pkgs`` to get url you will need to put inside the developer Load (in the extension tab)
 Watch out it served a 127.0.0.1:4500 but i only manage to make it works through localhost:4500 (i know it should be the same)
 
+``docker compose up -d --build && docker compose exec rancher-extension bash`` to launch the docker container and get a bash inside it. You can then run the same commands as before but inside the container; usually done for debugging purposes. (To do this command you should uncomment the command in the docker-compose.yml file)
+
+``docker compose up --build`` to launch the docker container wich will then install and launch the server. You can then access it through localhost:8080 and see the changes you made to the extension. 
 
 # Dependencies
 
@@ -55,8 +58,7 @@ in the scripts section.
 Extension support is not enabled
 Automatic installation is not available - required Helm Charts could not be found
 ```
-Fixed -> updating the package.json and reverting seemed to remove this error.
-Update: Seems like it has been an rancher update since i can't reproduce this error
+Fixed -> This error seems to only be produce in node version 16, switching to node 20 fixed the problem. You can use nvm to manage your node versions.
 
 - Problem with the yarn dev environment which launches:
 ```ERROR
@@ -68,17 +70,20 @@ Fixed -> ?
 
 - Problem with the extension being removed after being installed through yarn serve-pkgs and reloading the page
 
-fixed -> ?
+fixed -> The name of the extension should only contain lowercase letters.
 
 - Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost
 
 fixed -> For now I just don't use it
 
+- Problem with yarn dev not connecting to the rancher instance and showing "Welcome to rancher howdy!" instead of the server
+
+fixed -> Try ``yarn run clean`` and then ``API=<url> yarn dev``. This usually happens when the build is not clean and the old files are still there.
+
+
 # Source
 
 [Getting started with rancher extension](http://extensions.rancher.io/extensions/next/extensions-getting-started)
-The official documentation will provoke a crash even when strictly following the instructions
-and the version. You really should stick with Docker.
 
 [Youtube follow along guide](https://www.youtube.com/watch?v=7xBUvNI__uc)
 
