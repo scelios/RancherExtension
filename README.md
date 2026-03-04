@@ -72,7 +72,7 @@ Fixed -> ?
 
 fixed -> The name of the extension should only contain lowercase letters.
 
-- Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost
+- Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost (through const shell = (window as any).$globalApp?.$shell;)
 
 fixed -> For now I just don't use it
 
@@ -80,6 +80,10 @@ fixed -> For now I just don't use it
 
 fixed -> Try ``yarn run clean`` and then ``API=<url> yarn dev``. This usually happens when the build is not clean and the old files are still there.
 
+
+- Problem with the extension wich once installed on the server and reloaded the page disappear
+
+fixed -> Watch out with the name of the extension, it should only contains lowercase letters
 
 # Source
 
