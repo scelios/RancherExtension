@@ -72,7 +72,7 @@ Fixed -> ?
 
 fixed -> The name of the extension should only contain lowercase letters.
 
-- Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost (through const shell = (window as any).$globalApp?.$shell;)
+- Impossibilities to used the useShell() in index.ts after being installed. But it is working on localhost (through ``const shell = (window as any).$globalApp?.$shell;``)
 
 fixed -> For now I just don't use it
 
